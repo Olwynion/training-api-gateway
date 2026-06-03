@@ -1,0 +1,3 @@
+[submodule "proto/contracts"]
+	path = proto/contracts
+	url = https://github.com/Olwynion/training-contracts.git

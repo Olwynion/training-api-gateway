@@ -1,0 +1,16 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+
+# IDE
+.idea/
+*.sln.DotSettings
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Local config
+appsettings.Local.json
