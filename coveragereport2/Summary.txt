@@ -1,0 +1,28 @@
+Summary
+  Generated on: 04.06.2026 - 14:21:15
+  Coverage date: 04.06.2026 - 14:15:30
+  Parser: Cobertura
+  Assemblies: 1
+  Classes: 6
+  Files: 6
+  Line coverage: 41.6%
+  Covered lines: 109
+  Uncovered lines: 153
+  Coverable lines: 262
+  Total lines: 450
+  Branch coverage: 43.1% (19 of 44)
+  Covered branches: 19
+  Total branches: 44
+  Method coverage: 50% (25 of 50)
+  Full method coverage: 46% (23 of 50)
+  Covered methods: 25
+  Fully covered methods: 23
+  Total methods: 50
+
+Training.ApiGateway                                         41.6%
+  Program                                                      0%
+  Training.ApiGateway.Controllers.AiController               100%
+  Training.ApiGateway.Controllers.AuthController             100%
+  Training.ApiGateway.Controllers.TrainingController        24.8%
+  Training.ApiGateway.Converters.MuscleGroupJsonConverter      0%
+  Training.ApiGateway.Middleware.JwtMiddleware              87.5%

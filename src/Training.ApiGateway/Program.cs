@@ -1,12 +1,19 @@
 using Training.ApiGateway.Middleware;
 using Training.ApiGateway.Converters;
+using Training.ApiGateway.Repositories;
+using Training.ApiGateway.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is required");
+var jwtSecret = builder.Configuration["Jwt:Secret"]
+    ?? throw new InvalidOperationException("Jwt:Secret is required");
 
-builder.Services.AddGrpcClient<Training.Auth.AuthService.AuthServiceClient>(o =>
-    o.Address = new Uri(builder.Configuration["Services:Auth"] ?? "http://localhost:5002"));
+builder.Services.AddSingleton(new JwtTokenService(jwtSecret));
+builder.Services.AddScoped<IUserRepository>(_ => new UserRepository(connStr));
+builder.Services.AddScoped<AuthService>();
+
 builder.Services.AddGrpcClient<Training.Training.Proto.TrainingService.TrainingServiceClient>(o =>
     o.Address = new Uri(builder.Configuration["Services:Training"] ?? "http://localhost:5003"));
 builder.Services.AddGrpcClient<Training.AI.Proto.AiService.AiServiceClient>(o =>
