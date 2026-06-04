@@ -158,6 +158,13 @@ public class TrainingController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("one-rm/{userId}")]
+    public async Task<IActionResult> GetOneRm(string userId)
+    {
+        var response = await _training.GetUserOneRmsAsync(new GetUserOneRmsRequest { UserId = userId });
+        return Ok(response.Entries.Select(e => new { exercise_id = e.ExerciseId, one_rm = e.OneRm }));
+    }
+
     [HttpPost("one-rm")]
     public async Task<IActionResult> SaveOneRm([FromBody] SaveOneRmBody body)
     {
