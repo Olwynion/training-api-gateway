@@ -158,6 +158,13 @@ public class TrainingController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("one-rm/{userId}")]
+    public async Task<IActionResult> GetOneRm(string userId)
+    {
+        var response = await _training.GetUserOneRmsAsync(new GetUserOneRmsRequest { UserId = userId });
+        return Ok(response.OneRms.Select(o => new { exercise_id = o.ExerciseId, one_rm = o.OneRm }));
+    }
+
     [HttpPost("one-rm")]
     public async Task<IActionResult> SaveOneRm([FromBody] SaveOneRmBody body)
     {
@@ -198,6 +205,7 @@ public class TrainingController : ControllerBase
                     {
                         Id = e.Id,
                         ExerciseId = e.ExerciseId,
+                        ExerciseName = e.ExerciseName,
                         Sets = e.Sets,
                         SortOrder = e.SortOrder
                     });
@@ -217,5 +225,5 @@ public class TrainingController : ControllerBase
     public record OneRmEntryDto(long ExerciseId, double OneRm);
     public record UpdatePlanDaysBody(string UserId, List<PlanDayDto> Days);
     public record PlanDayDto(long Id, string DayName, MuscleGroup FocusGroup, int SortOrder, List<ExerciseDto>? Exercises);
-    public record ExerciseDto(long Id, long ExerciseId, int Sets, int SortOrder);
+    public record ExerciseDto(long Id, long ExerciseId, int Sets, int SortOrder, string ExerciseName = "");
 }
