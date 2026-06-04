@@ -1,64 +1,56 @@
 using Microsoft.AspNetCore.Mvc;
-using AuthProto = global::Training.Auth;
+using Training.ApiGateway.Services;
 
 namespace Training.ApiGateway.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController : ControllerBase
+public class AuthController(AuthService auth) : ControllerBase
 {
-    private readonly AuthProto.AuthService.AuthServiceClient _auth;
-
-    public AuthController(AuthProto.AuthService.AuthServiceClient auth)
-    {
-        _auth = auth;
-    }
-
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterBody body)
     {
-        var response = await _auth.RegisterAsync(new global::Training.Auth.RegisterRequest
-        {
-            Email = body.Email, Password = body.Password, Name = body.Name
-        });
-        return Ok(FormatAuth(response));
+        var (user, accessToken, refreshToken, expiresAt) = await auth.RegisterAsync(body.Email, body.Password, body.Name);
+        return Ok(FormatAuth(user.Id, user.Email, user.Name, accessToken, refreshToken, expiresAt));
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginBody body)
     {
-        var response = await _auth.LoginAsync(new global::Training.Auth.LoginRequest
-        {
-            Email = body.Email, Password = body.Password
-        });
-        return Ok(FormatAuth(response));
+        var (user, accessToken, refreshToken, expiresAt) = await auth.LoginAsync(body.Email, body.Password);
+        return Ok(FormatAuth(user.Id, user.Email, user.Name, accessToken, refreshToken, expiresAt));
     }
 
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] RefreshBody body)
     {
-        var response = await _auth.RefreshTokenAsync(new global::Training.Auth.RefreshTokenRequest { RefreshToken = body.RefreshToken });
-        return Ok(FormatAuth(response));
+        var (user, accessToken, refreshToken, expiresAt) = await auth.RefreshTokenAsync(body.RefreshToken);
+        return Ok(FormatAuth(user.Id, user.Email, user.Name, accessToken, refreshToken, expiresAt));
     }
 
     [HttpPost("logout")]
     public async Task<IActionResult> Logout([FromBody] LogoutBody body)
     {
-        await _auth.LogoutAsync(new global::Training.Auth.LogoutRequest { UserId = body.UserId });
+        await auth.LogoutAsync(body.UserId);
         return Ok();
     }
 
     [HttpPost("validate")]
-    public async Task<IActionResult> Validate([FromBody] ValidateBody body)
+    public IActionResult Validate([FromBody] ValidateBody body)
     {
-        var response = await _auth.ValidateTokenAsync(new global::Training.Auth.ValidateTokenRequest { AccessToken = body.AccessToken });
-        return Ok(new { is_valid = response.IsValid, is_expired = response.IsExpired, user_id = response.UserId, email = response.Email });
+        var principal = auth.ValidateToken(body.AccessToken);
+        if (principal == null)
+            return Ok(new { is_valid = false, is_expired = false, user_id = "", email = "" });
+        var userId = principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
+        var email = principal.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
+        return Ok(new { is_valid = true, is_expired = false, user_id = userId, email = email });
     }
 
-    private static object FormatAuth(dynamic r) => new
+    private static object FormatAuth(long userId, string email, string name, string accessToken, string refreshToken, DateTime expiresAt) => new
     {
-        access_token = r.AccessToken, refresh_token = r.RefreshToken,
-        user_id = r.UserId, email = r.Email, name = r.Name, expires_at = r.ExpiresAt
+        access_token = accessToken, refresh_token = refreshToken,
+        user_id = userId.ToString(), email, name,
+        expires_at = expiresAt.ToString("O")
     };
 
     public record RegisterBody(string Email, string Password, string Name);

@@ -1,0 +1,16 @@
+app = "training-gateway"
+
+[build]
+
+[http_service]
+  internal_port = 5000
+  force_https = true
+
+[[env]]
+  ASPNETCORE_ENVIRONMENT = "Production"
+
+[env]
+  CONNECTIONSTRINGS__DEFAULTCONNECTION = "${DATABASE_URL}"
+  JWT__SECRET = "${JWT_SECRET}"
+  SERVICES__TRAINING = "http://training-training.internal:5003"
+  SERVICES__AI = "http://training-ai.internal:5004"
