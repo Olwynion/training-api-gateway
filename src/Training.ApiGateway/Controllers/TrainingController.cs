@@ -182,7 +182,26 @@ public class TrainingController : ControllerBase
     public async Task<IActionResult> UpdatePlanDays(long planId, [FromBody] UpdatePlanDaysBody body)
     {
         var request = new UpdatePlanDaysRequest { PlanId = planId, UserId = body.UserId };
-        request.Days.AddRange(body.Days);
+        foreach (var d in body.Days)
+        {
+            var day = new PlanDayUpdate
+            {
+                Id = d.Id,
+                DayName = d.DayName,
+                FocusGroup = d.FocusGroup,
+                SortOrder = d.SortOrder
+            };
+            if (d.Exercises != null)
+                foreach (var e in d.Exercises)
+                    day.Exercises.Add(new DayExerciseUpdate
+                    {
+                        Id = e.Id,
+                        ExerciseId = e.ExerciseId,
+                        Sets = e.Sets,
+                        SortOrder = e.SortOrder
+                    });
+            request.Days.Add(day);
+        }
         var response = await _training.UpdatePlanDaysAsync(request);
         return Ok(new { id = response.Plan.Id, days = response.Plan.Days });
     }
@@ -194,5 +213,7 @@ public class TrainingController : ControllerBase
     public record ProgressBody(string UserId);
     public record SavePreferencesBody(string UserId, int DaysPerWeek, string ProgramType, MuscleGroup FocusGroup);
     public record SaveOneRmBody(string UserId, List<OneRmEntry> Entries);
-    public record UpdatePlanDaysBody(string UserId, List<PlanDayUpdate> Days);
+    public record UpdatePlanDaysBody(string UserId, List<PlanDayDto> Days);
+    public record PlanDayDto(long Id, string DayName, MuscleGroup FocusGroup, int SortOrder, List<ExerciseDto>? Exercises);
+    public record ExerciseDto(long Id, long ExerciseId, int Sets, int SortOrder);
 }

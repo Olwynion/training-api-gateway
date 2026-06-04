@@ -4,6 +4,12 @@ public class JwtMiddleware(RequestDelegate next)
 {
     public async Task InvokeAsync(HttpContext context)
     {
+        if (context.Request.Method == HttpMethods.Options)
+        {
+            await next(context);
+            return;
+        }
+
         if (context.Request.Path.StartsWithSegments("/api/auth"))
         {
             await next(context);
