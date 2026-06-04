@@ -1,4 +1,5 @@
 using Training.ApiGateway.Middleware;
+using Training.ApiGateway.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,16 @@ builder.Services.AddGrpcClient<Training.Training.Proto.TrainingService.TrainingS
 builder.Services.AddGrpcClient<Training.AI.Proto.AiService.AiServiceClient>(o =>
     o.Address = new Uri(builder.Configuration["Services:Ai"] ?? "http://localhost:5004"));
 
-builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new MuscleGroupJsonConverter());
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -23,6 +33,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseCors();
 app.UseMiddleware<JwtMiddleware>();
 app.MapControllers();
 app.MapGet("/health", () => "OK");
