@@ -36,6 +36,17 @@ public class TrainingController : ControllerBase
         return Ok(new { id = response.Exercise.Id });
     }
 
+    [HttpPut("exercises/{id:long}")]
+    public async Task<IActionResult> UpdateExercise(long id, [FromBody] UpdateExerciseBody body)
+    {
+        await _training.UpdateExerciseAsync(new UpdateExerciseRequest
+        {
+            Id = id, Name = body.Name, DefaultOneRm = body.DefaultOneRm,
+            MuscleGroup = body.MuscleGroup, UserId = body.UserId
+        });
+        return Ok();
+    }
+
     [HttpDelete("exercises/{id:long}")]
     public async Task<IActionResult> DeleteExercise(long id, [FromQuery] string user_id)
     {
@@ -177,6 +188,7 @@ public class TrainingController : ControllerBase
     }
 
     public record CreateExerciseBody(string Name, double DefaultOneRm, MuscleGroup MuscleGroup, string UserId);
+    public record UpdateExerciseBody(string Name, double DefaultOneRm, MuscleGroup MuscleGroup, string UserId);
     public record CreatePlanBody(string UserId, string Name);
     public record SetCycleBody(int CycleNumber, string UserId);
     public record ProgressBody(string UserId);
