@@ -1,0 +1,97 @@
+Summary
+  Generated on: 04.06.2026 - 14:15:31
+  Coverage date: 04.06.2026 - 14:15:30
+  Parser: Cobertura
+  Assemblies: 1
+  Classes: 75
+  Files: 12
+  Line coverage: 6.3%
+  Covered lines: 371
+  Uncovered lines: 5447
+  Coverable lines: 5818
+  Total lines: 17644
+  Branch coverage: 0.6% (19 of 2890)
+  Covered branches: 19
+  Total branches: 2890
+  Method coverage: 10.1% (158 of 1550)
+  Full method coverage: 8.1% (127 of 1550)
+  Covered methods: 158
+  Fully covered methods: 127
+  Total methods: 1550
+
+Training.ApiGateway                                          6.3%
+  Program                                                      0%
+  Training.AI.Proto.AiReflection                               0%
+  Training.AI.Proto.AiService                                4.3%
+  Training.AI.Proto.ExerciseTemplate                           0%
+  Training.AI.Proto.GeneratePlanRequest                     12.9%
+  Training.AI.Proto.GeneratePlanResponse                    16.3%
+  Training.AI.Proto.GenerationHistoryItem                   12.5%
+  Training.AI.Proto.GetGenerationHistoryRequest              8.7%
+  Training.AI.Proto.GetGenerationHistoryResponse             7.5%
+  Training.ApiGateway.Controllers.AiController               100%
+  Training.ApiGateway.Controllers.AuthController             100%
+  Training.ApiGateway.Controllers.TrainingController        24.8%
+  Training.ApiGateway.Converters.MuscleGroupJsonConverter      0%
+  Training.ApiGateway.Middleware.JwtMiddleware              87.5%
+  Training.Auth.AuthReflection                                 0%
+  Training.Auth.AuthService                                  2.4%
+  Training.Auth.LoginRequest                                10.9%
+  Training.Auth.LoginResponse                               16.2%
+  Training.Auth.LogoutRequest                                7.1%
+  Training.Auth.LogoutResponse                               4.8%
+  Training.Auth.RefreshTokenRequest                          8.7%
+  Training.Auth.RefreshTokenResponse                        10.3%
+  Training.Auth.RegisterRequest                             12.3%
+  Training.Auth.RegisterResponse                            17.7%
+  Training.Auth.ValidateTokenRequest                         8.7%
+  Training.Auth.ValidateTokenResponse                       12.7%
+  Training.Training.Proto.CreateExerciseRequest             11.6%
+  Training.Training.Proto.CreateExerciseResponse             8.3%
+  Training.Training.Proto.CreateWorkoutPlanRequest             0%
+  Training.Training.Proto.CreateWorkoutPlanResponse            0%
+  Training.Training.Proto.CycleData                         10.6%
+  Training.Training.Proto.DayData                              0%
+  Training.Training.Proto.DayExercise                          0%
+  Training.Training.Proto.DayExerciseUpdate                    0%
+  Training.Training.Proto.DeleteExerciseRequest                0%
+  Training.Training.Proto.DeleteExerciseResponse               0%
+  Training.Training.Proto.DeleteWorkoutPlanRequest           9.7%
+  Training.Training.Proto.DeleteWorkoutPlanResponse          4.8%
+  Training.Training.Proto.Exercise                           9.7%
+  Training.Training.Proto.ExerciseSet                          0%
+  Training.Training.Proto.GetBuiltInExercisesRequest           0%
+  Training.Training.Proto.GetBuiltInExercisesResponse          0%
+  Training.Training.Proto.GetCycleDataRequest                9.7%
+  Training.Training.Proto.GetCycleDataResponse               8.3%
+  Training.Training.Proto.GetExercisesRequest                8.7%
+  Training.Training.Proto.GetExercisesResponse               7.5%
+  Training.Training.Proto.GetUserOneRmsRequest                 0%
+  Training.Training.Proto.GetUserOneRmsResponse                0%
+  Training.Training.Proto.GetUserPreferencesRequest            0%
+  Training.Training.Proto.GetUserPreferencesResponse           0%
+  Training.Training.Proto.GetUserWorkoutPlansRequest         8.7%
+  Training.Training.Proto.GetUserWorkoutPlansResponse        7.5%
+  Training.Training.Proto.GetWorkoutPlanRequest                0%
+  Training.Training.Proto.GetWorkoutPlanResponse               0%
+  Training.Training.Proto.IncrementProgressRequest             0%
+  Training.Training.Proto.IncrementProgressResponse            0%
+  Training.Training.Proto.OneRmEntry                           0%
+  Training.Training.Proto.PlanDay                              0%
+  Training.Training.Proto.PlanDayUpdate                        0%
+  Training.Training.Proto.SaveOneRmsRequest                    0%
+  Training.Training.Proto.SaveOneRmsResponse                   0%
+  Training.Training.Proto.SavePreferencesRequest               0%
+  Training.Training.Proto.SavePreferencesResponse              0%
+  Training.Training.Proto.SetCycleRequest                      0%
+  Training.Training.Proto.SetCycleResponse                     0%
+  Training.Training.Proto.TrainingReflection                   0%
+  Training.Training.Proto.TrainingService                    0.8%
+  Training.Training.Proto.UpdateExerciseRequest                0%
+  Training.Training.Proto.UpdateExerciseResponse               0%
+  Training.Training.Proto.UpdatePlanDaysRequest                0%
+  Training.Training.Proto.UpdatePlanDaysResponse               0%
+  Training.Training.Proto.UpdateWorkoutPlanRequest             0%
+  Training.Training.Proto.UpdateWorkoutPlanResponse            0%
+  Training.Training.Proto.UserPreferences                      0%
+  Training.Training.Proto.WorkoutPlan                        8.4%
