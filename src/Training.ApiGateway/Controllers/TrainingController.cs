@@ -162,7 +162,8 @@ public class TrainingController : ControllerBase
     public async Task<IActionResult> SaveOneRm([FromBody] SaveOneRmBody body)
     {
         var request = new SaveOneRmsRequest { UserId = body.UserId };
-        request.Entries.AddRange(body.Entries);
+        foreach (var e in body.Entries)
+            request.Entries.Add(new OneRmEntry { ExerciseId = e.ExerciseId, OneRm = e.OneRm });
         await _training.SaveOneRmsAsync(request);
         return Ok();
     }
@@ -212,7 +213,8 @@ public class TrainingController : ControllerBase
     public record SetCycleBody(int CycleNumber, string UserId);
     public record ProgressBody(string UserId);
     public record SavePreferencesBody(string UserId, int DaysPerWeek, string ProgramType, MuscleGroup FocusGroup);
-    public record SaveOneRmBody(string UserId, List<OneRmEntry> Entries);
+    public record SaveOneRmBody(string UserId, List<OneRmEntryDto> Entries);
+    public record OneRmEntryDto(long ExerciseId, double OneRm);
     public record UpdatePlanDaysBody(string UserId, List<PlanDayDto> Days);
     public record PlanDayDto(long Id, string DayName, MuscleGroup FocusGroup, int SortOrder, List<ExerciseDto>? Exercises);
     public record ExerciseDto(long Id, long ExerciseId, int Sets, int SortOrder);
