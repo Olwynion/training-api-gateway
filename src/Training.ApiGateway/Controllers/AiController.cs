@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Training.AI.Proto;
+using Training.Training.Proto;
 
 namespace Training.ApiGateway.Controllers;
 
@@ -19,7 +20,9 @@ public class AiController : ControllerBase
     {
         var request = new GeneratePlanRequest
         {
-            UserId = body.UserId, Prompt = body.Prompt
+            UserId = body.UserId, Prompt = body.Prompt,
+            DaysPerWeek = body.DaysPerWeek, ProgramType = body.ProgramType,
+            FocusGroup = body.FocusGroup
         };
         request.Exercises.AddRange(body.Exercises);
 
@@ -42,5 +45,5 @@ public class AiController : ControllerBase
         }));
     }
 
-    public record GenerateBody(string UserId, string Prompt, List<ExerciseTemplate> Exercises);
+    public record GenerateBody(string UserId, string Prompt, List<ExerciseTemplate> Exercises, int DaysPerWeek = 3, string ProgramType = "fullbody", MuscleGroup FocusGroup = MuscleGroup.Unspecified);
 }

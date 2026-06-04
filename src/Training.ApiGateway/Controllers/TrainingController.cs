@@ -127,8 +127,60 @@ public class TrainingController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("preferences/{userId}")]
+    public async Task<IActionResult> GetPreferences(string userId)
+    {
+        var response = await _training.GetUserPreferencesAsync(new GetUserPreferencesRequest { UserId = userId });
+        if (response.Preferences == null)
+            return NotFound();
+        return Ok(response.Preferences);
+    }
+
+    [HttpPost("preferences")]
+    public async Task<IActionResult> SavePreferences([FromBody] SavePreferencesBody body)
+    {
+        await _training.SavePreferencesAsync(new SavePreferencesRequest
+        {
+            UserId = body.UserId, DaysPerWeek = body.DaysPerWeek,
+            ProgramType = body.ProgramType, FocusGroup = body.FocusGroup
+        });
+        return Ok();
+    }
+
+    [HttpPost("one-rm")]
+    public async Task<IActionResult> SaveOneRm([FromBody] SaveOneRmBody body)
+    {
+        var request = new SaveOneRmsRequest { UserId = body.UserId };
+        request.Entries.AddRange(body.Entries);
+        await _training.SaveOneRmsAsync(request);
+        return Ok();
+    }
+
+    [HttpGet("exercises/built-in")]
+    public async Task<IActionResult> GetBuiltInExercises()
+    {
+        var response = await _training.GetBuiltInExercisesAsync(new GetBuiltInExercisesRequest());
+        return Ok(response.Exercises.Select(e => new
+        {
+            id = e.Id, name = e.Name, default_one_rm = e.DefaultOneRm,
+            muscle_group = e.MuscleGroup, is_built_in = e.IsBuiltIn
+        }));
+    }
+
+    [HttpPut("plans/{planId:long}/days")]
+    public async Task<IActionResult> UpdatePlanDays(long planId, [FromBody] UpdatePlanDaysBody body)
+    {
+        var request = new UpdatePlanDaysRequest { PlanId = planId, UserId = body.UserId };
+        request.Days.AddRange(body.Days);
+        var response = await _training.UpdatePlanDaysAsync(request);
+        return Ok(new { id = response.Plan.Id, days = response.Plan.Days });
+    }
+
     public record CreateExerciseBody(string Name, double DefaultOneRm, MuscleGroup MuscleGroup, string UserId);
     public record CreatePlanBody(string UserId, string Name);
     public record SetCycleBody(int CycleNumber, string UserId);
     public record ProgressBody(string UserId);
+    public record SavePreferencesBody(string UserId, int DaysPerWeek, string ProgramType, MuscleGroup FocusGroup);
+    public record SaveOneRmBody(string UserId, List<OneRmEntry> Entries);
+    public record UpdatePlanDaysBody(string UserId, List<PlanDayUpdate> Days);
 }
